@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <link rel="stylesheet" href="/stylesheets/style.css"/>
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"/>
+        
+        <title>My TO-Do List</title>
+
+        <body>
+            <div id="navbar">
+
+            </div><h1 align="center">TO DO LIST</h1>
+            <div id="contents">
+            <div id="items">
+               
+                <div><input type="text" id="tasktitleInput" placeholder="Task Tilte"><br>  </div>
+                <div><input type="text" id="taskdescInput" placeholder="Task Description"><br> </div> 
+                <div><input type="date" id="taskdeadlineInput"><br><br></div><br>
+           
+            <button id="abutton"  class="tasks" onclick="addTask()">Add task</button>  
+
+            <div id="details"> </div>
+
+            
+            </div>
+
+    </div>
+        <br>
+          
+            
+       
+    
+       <script>
+   
+   var todoItems = [1, 2, 3];
+
+
+var items = {
+         taskTitle: 'Title1',
+         taskDescription: 'Description of first task',
+         taskDeadline: '2012-05-8'
+      };
+
+
+  var todoItems = [
+
+    ];
+
+
+  
+        function addTask(){
+         
+   
+           var taskT=document.getElementById("tasktitleInput");
+           var taskD=document.getElementById("taskdescInput");
+           var taskde=document.getElementById("taskdeadlineInput");
+
+           
+           var tasktitle=taskT.value;
+           var taskdesc=taskD.value;
+           var taskdeadline=taskde.value;
+
+            var output="";
+            var det=document.getElementById('details');
+          var output=" ";
+          var list=[];
+          var url="http://localhost:8071";
+          fetch(url+"/Add",{
+               method:"POST",
+               body:JSON.stringify({
+                   
+                   "tasktitle":tasktitle,
+                   "taskdesc":taskdesc,
+                   "taskdeadline":taskdeadline
+               
+               }),
+               headers:{
+                   'Content-type':'application/json'
+               }
+            }).then(res=>{
+
+                    
+                    if(res.status === 200){
+                       
+
+                        var newTask = {
+                           taskTitle: tasktitle,
+                           taskDescription: taskdesc,
+                           taskDeadline: taskdeadline
+                         };
+
+               todoItems.push(newTask);
+
+               taskT.value="";
+               taskD.value="";
+               taskde.value="";
+               render();
+               
+
+                        
+                }
+            })
+                    
+                }
+                function render() {
+                            var det=document.getElementById('details');
+          var output=" ";
+                var textHtml = "";
+
+    
+            for (var i = 0; i < todoItems.length; i++) {
+                output += `<br><div class="todo-item" align="left">
+                    <div class="task-title">${todoItems[i].taskTitle}</div>
+                    <div class="task-description">${todoItems[i].taskDescription}</div>
+                    <div class="task-deadline">${todoItems[i].taskDeadline}</div>
+                    <a href="#" class="delete" onclick="deleteTask(${i})"><i class="fa fas fa-trash"></i></a>&nbsp;
+                    <a href="#" class="edit" onclick="editTask(${i})"><i class="fa fas fa-edit"></i></a>
+                </div>`;
+             }
+
+            det.innerHTML = output;
+
+
+         }
+                
+                    
+
+                function editTask(index){
+             
+
+             var title=todoItems[index].taskTitle;
+             var description=todoItems[index].taskDescription;
+             var deadline=todoItems[index].taskDeadline;
+
+            tasktitleInput.value=title;
+          taskdescInput.value=description;
+           taskdeadlineInput.value=deadline;
+           
+             
+           deleteTask(index);
+
+    }
+
+    function deleteTask(index){
+        
+
+
+        
+        var url="http://localhost:8071";
+        fetch(url+'/Del',{
+               method:"POST",
+               body:JSON.stringify({
+                  'tasktitle':todoItems[index].taskTitle,
+                  'taskdesc':todoItems[index].taskDescription,
+                  'taskdeadline':todoItems[index].taskDeadline
+               }),
+               headers:{
+                   'Content-type':'application/json'
+               }
+            }).then(res=>{
+                var todonewList = [];
+
+for (var i = 0; i < todoItems.length; i++) {
+    if (i !== index) {
+        todonewList.push(todoItems[i]);
+    }
+}
+
+todoItems = todonewList;
+render();
+                     render();
+
+    })
+}
+            
+           </script>
+
+
+            </body>
+    </head>
+</html>

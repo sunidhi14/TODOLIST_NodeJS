@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html>
+    <head>
+     <link rel="stylesheet" href="/stylesheets/style.css">
+     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"/>
+    </head>
+    <body>
+        <div id="details"> </div>
+    </body>
+    <script>
+      
+        var det=document.getElementById("details");
+     var promiseOfdata=fetch("http://localhost:8010/show")
+     .then(response => response.json()) 
+    .then(json => { 
+        var op = `<tr><th>Title:</th><th>Desc:</th></tr>`; 
+            json.forEach(user => { 
+                
+            op +=  `<tr> 
+                <td>${user.tasktitle} </td> 
+                <td>${user.taskdesc}</td>     
+               
+                </tr>`;
+            det.innerHTML=op;
+        }); 
+   
+         })
+        
+     
+
+     
+
+
+     
+       
+       
+       
+        
+    
+
+    </script>
+</html>

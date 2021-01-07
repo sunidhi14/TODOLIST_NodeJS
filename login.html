@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>First Page</title>
+       <link rel="stylesheet" href="stylesheets/basicstyle.css"/>
+        <body>
+            <div id="contents">
+                <div id="loginbox" >
+                    <div id="login" style="margin-top: 25px;"><h1>LOGIN:</h1></div><br>
+                    <div id="username"><input id="userName" type="text" placeholder="type username here:"></div><br><br><br>
+                    <div id="password"><input id="passWord" type="password" placeholder="type password here:"></div><br><br><br>
+                    <div id="button"><button id="button" onclick="login()">Login</button></div>
+                    <div id="outputD"> </div>
+                  
+                </div>
+
+                <div id="Signup" >
+                    <div id="login" style="margin-top: 25px;"><h1>SIGN UP:</h1></div><br>
+                    <div id="name"><input type="text" id="Uname" placeholder="Username"/></div><br><br><br>
+                    <div id="Pwd"><input type="password" id="Password" placeholder="Password"></div><br><br><br>
+                    <div id="button"><button id="button" onclick="signup()">Sign- Up</button></div>
+                    <div id="output"> </div>
+                </div>
+
+           
+        </div>
+            
+             
+             
+        </body>
+         <script>
+             function login(){
+            var k=1;
+                 var uname=document.getElementById("userName");
+                 var username=uname.value;
+                 var pwd=document.getElementById("passWord");
+                 var password=pwd.value;
+                 var url="http://localhost:8071";
+                 fetch(url+'/Login',{
+                     method:"POST",
+                     body:JSON.stringify({
+                         "username":username,
+                         "password":password
+                     }),
+                     headers:{
+                         'Content-type':"application/json"
+                     }
+                 })
+                 .then(res=>{ 
+                    if(res.status === 500){
+                        var op=document.getElementById('outputD');
+                        op.innerHTML="Please enter details correctly";
+                    }
+                    else if(res.status===200){
+                        window.open("http://localhost:8071/to-do-list");
+                    }
+           })
+        }
+
+
+        function signup(){
+            var output="";
+                 var uname=document.getElementById("Uname");
+                 var username=uname.value;
+                 var pwd=document.getElementById("Password");
+                 var password=pwd.value;
+                 var url="http://localhost:8071";
+                 fetch(url+'/Signup',{
+                     method:"POST",
+                     body:JSON.stringify({
+                         "username":username,
+                         "password":password
+                     }),
+                     headers:{
+                         'Content-type':"application/json"
+                     }
+                 })
+                 .then(res=>{ 
+                    if(res.status === 500){
+                        alert("error");
+                    }
+                     if(res.status === 201){
+                        var det=document.getElementById('output');
+                        det.innerHTML="Already Exist";
+
+                    }
+                     if(res.status === 200){
+                        var det=document.getElementById('output');
+                        det.innerHTML="You are registered..can login now";
+                    }
+                })
+                    
+           
+        }
+        </script>
+    </head>
+</html>
